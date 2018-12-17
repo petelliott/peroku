@@ -41,7 +41,7 @@
                       `(("label" . #(,+label+))))))
     (mapcar
       (lambda (cont)
-        `(("names" . ,(cdr (assoc :*NAMES cont)))
+        `(("project" . ,(subseq (car (cdr (assoc :*NAMES cont))) 1))
           ("rule" . ,(cdr (assoc :traefik.frontend.rule
                                  (cdr (assoc :*LABELS cont)))))))
       dockerinfo)))

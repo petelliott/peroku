@@ -27,9 +27,14 @@
 
 (setf (ningle:route *app* "/run" :method :POST)
       (lambda (params)
-        (print params)
-        (print "")
-        "run not yet implemented"))
+        (headers :content-type "application/json")
+        (let* ((project (cdr (assoc "project" params :test #'string=)))
+               (rule (cdr (assoc "rule" params :test #'string=)))
+               (data (cdr (assoc "data" params :test #'string=)))
+               (image (cdr (assoc :+ID+ (core:build data))))
+               (cont (core:replace-container project rule image)))
+          (docker:start-container project)
+          (json:encode-json-to-string cont))))
 
 (setf (ningle:route *app* "/:project" :method :GET)
       (lambda (params)
