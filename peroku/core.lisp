@@ -18,7 +18,7 @@
   (docker:build-image
     (base64:base64-string-to-usb8-array tarstring)))
 
-(defun create-container (project host image)
+(defun create-container (project rule image)
   "creates the containers for a project"
   (docker:create-container
     image
@@ -26,13 +26,13 @@
     :json `(("Labels"
              (,+label+ . "")
              ("traefik.port" . "80")
-             ("traefik.frontend.rule" . ,(format nil "Host:~a" host))))))
+             ("traefik.frontend.rule" . ,rule)))))
 
-(defun replace-container (project host image)
+(defun replace-container (project rule image)
   "creates a new container but deletes the old one first (if it exists)"
   (ignore-errors
     (delete-project project))
-  (create-container project host image))
+  (create-container project rule image))
 
 (defun list-projects ()
   "lists all containers manged by peroku"
