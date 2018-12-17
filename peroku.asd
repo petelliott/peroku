@@ -8,8 +8,10 @@
   :author  "Peter Elliott"
   :license "AGPL"
   :depends-on (:ningle
-               :docker)
+               :docker
+               :cl-base64)
   :components ((:module "peroku"
                 :components
-                ((:file "api"))))
+                ((:file "api")
+                 (:file "core"))))
   :description "the peroku server")
