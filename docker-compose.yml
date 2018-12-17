@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  peroku-traefik:
+    image: traefik # The official Traefik docker image
+    command: --api --docker # Enables the web UI and tells Traefik to listen to docker
+    ports:
+      - "80:80"     # The HTTP port
+      - "443:443"   # The HTTPS port
+      - "8080:8080" # The Web UI (enabled by --api)
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock # So that Traefik can listen to the Docker events
+  peroku:
+    image: peroku # the peroku image
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock # So that peroku can listen to the Docker events
+    labels:
+        # change this to expose peroku to your domain name
+      - "traefik.frontend.rule=Host:peroku.localhost"
