@@ -25,6 +25,7 @@
     :name project
     :json `(("Labels"
              (,+label+ . "")
+             ("traefik.port" . "80")
              ("traefik.frontend.rule" . ,(format nil "Host:~a" host))))))
 
 (defun replace-container (project host image)
