@@ -9,9 +9,10 @@
   :license "AGPL"
   :depends-on (:ningle
                :docker
+               :cl-json
                :cl-base64)
   :components ((:module "peroku"
                 :components
-                ((:file "api")
-                 (:file "core"))))
+                ((:file "core")
+                 (:file "api"))))
   :description "the peroku server")

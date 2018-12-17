@@ -19,7 +19,11 @@
 (setf (ningle:route *app* "/list" :method :GET)
       (lambda (params)
         (declare (ignore params))
-        "get not yet implemented"))
+        (headers :content-type "application/json")
+        (let ((projects (core:list-projects)))
+          (if projects
+            (json:encode-json-to-string projects)
+            "[]"))))
 
 (setf (ningle:route *app* "/run" :method :POST)
       (lambda (params)
@@ -34,5 +38,10 @@
 
 (setf (ningle:route *app* "/:project" :method :DELETE)
       (lambda (params)
-        (declare (ignore params))
-        "deletion not yet implemented"))
+        (core:delete-project
+          (cdr (assoc :project params)))))
+
+(defun headers (&rest headers)
+  (setf (lack.response:response-headers ningle:*response*)
+        (append (lack.response:response-headers ningle:*response*)
+                headers)))

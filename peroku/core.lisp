@@ -6,7 +6,8 @@
     #:build
     #:create-container
     #:replace-container
-    #:list-containers))
+    #:list-projects
+    #:delete-project))
 
 (in-package :peroku.core)
 
@@ -29,10 +30,10 @@
 (defun replace-container (project host image)
   "creates a new container but deletes the old one first (if it exists)"
   (ignore-errors
-    (docker:remove-container project :force t))
+    (delete-project project))
   (create-container project host image))
 
-(defun list-containers ()
+(defun list-projects ()
   "lists all containers manged by peroku"
   (let ((dockerinfo (docker:list-containers
                       :all t
@@ -40,9 +41,12 @@
                       `(("label" . #(,+label+))))))
     (mapcar
       (lambda (cont)
-        (list
-          (assoc :*NAMES cont)
-          `(:*RULE . ,(cdr (assoc :traefik.frontend.rule
-                                  (cdr (assoc :*LABELS cont)))))))
+        `(("names" . ,(cdr (assoc :*NAMES cont)))
+          ("rule" . ,(cdr (assoc :traefik.frontend.rule
+                                 (cdr (assoc :*LABELS cont)))))))
       dockerinfo)))
 
+(defun delete-project (project)
+  "delete a project"
+  ;TODO: prune after project deletion
+  (docker:remove-container project :force t))
