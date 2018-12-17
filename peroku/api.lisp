@@ -17,7 +17,22 @@
                 (asdf:component-version
                   (asdf:find-system :peroku)))))
 
-(setf (ningle:route *app* "/build" :method :POST)
+(setf (ningle:route *app* "/:project/build" :method :POST)
       (lambda (params)
         (declare (ignore params))
-        "hello world"))
+        "build not yet implemented"))
+
+(setf (ningle:route *app* "/:project/run" :method :POST)
+      (lambda (params)
+        (declare (ignore params))
+        "run not yet implemented"))
+
+(setf (ningle:route *app* "/:project/start" :method :POST)
+      (lambda (params)
+        (declare (ignore params))
+        "start not yet implemented"))
+
+(setf (ningle:route *app* "/:project/stop" :method :POST)
+      (lambda (params)
+        (declare (ignore params))
+        "stop not yet implemented"))
