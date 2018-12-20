@@ -16,6 +16,7 @@ RUN sbcl --eval '(ql:quickload :clack)' \
     --eval '(ql:quickload :docker)' \
     --eval '(ql:quickload :cl-base64)' \
     --eval '(ql:quickload :cl-json)' \
+    --eval '(ql:quickload :websocket-driver-server)' \
     --quit
 
 COPY peroku.asd /root/quicklisp/local-projects/peroku/peroku.asd
@@ -26,5 +27,6 @@ RUN sbcl --eval '(ql:quickload :peroku)' --quit
 
 CMD sbcl --eval '(ql:quickload :clack)' \
     --eval '(ql:quickload :peroku)' \
-    --eval '(clack:clackup peroku.api:*app* :use-thread nil :port 80)'
+    --eval '(clack:clackup peroku.api:*app* :use-thread nil :port 80)' \
+    --quit
 
