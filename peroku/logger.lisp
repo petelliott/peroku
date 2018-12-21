@@ -34,7 +34,7 @@
   it up with the previous messages"
   (bt:with-lock-held ((logger-lock logger))
     (loop
-      for entry in (logger-history logger)
+      for entry in (reverse (logger-history logger))
       do (wsd:send ws entry))
     (if (logger-closed logger)
       (wsd:close-connection ws)
