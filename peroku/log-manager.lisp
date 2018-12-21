@@ -1,8 +1,13 @@
 (defpackage :peroku.log-manager
-  (:nicknames :log-manager)
+  (:nicknames :logman :log-manager)
   (:use :cl)
   (:export
-    #:make-log-endpoint))
+    #:*log-manager-mw*
+    #:make-log-endpoint
+    #:make-log-manager
+    #:*log-manager*
+    #:is-endpoint
+    #:log-manager-attach))
 
 (in-package :peroku.log-manager)
 
@@ -11,49 +16,47 @@
   (endpoints (make-hash-table :test 'equal)))
 
 
-(setf (ningle:route peroku.api:*app* "/logs/logtest" :method :GET)
-      (lambda (params)
-        (declare (ignore params))
-        (multiple-value-bind (logid logger)
-            (make-log-endpoint)
-          (logger:logger-send logger "hello")
-          (logger:logger-send logger "world")
-          logid)))
+(defvar *log-manager*
+  "a global log manager bound by lexical let with the *log-manager-mw*")
 
 
-(setf (ningle:route peroku.api:*app* "/logs/:logid" :method :GET)
-      (lambda (params)
-        (when (ningle:context :log-manager)
-          (let ((ws (wsd:make-server
-                      (lack.request:request-env ningle:*request*))))
-            (bt:with-lock-held ((log-manager-lock
-                                  (ningle:context :log-manager)))
-              (wsd:on :open ws
-                      (lambda ()
-                        (logger-attach
-                          (gethash
-                            (cdr (assoc :logid params))
-                            (log-manager-endpoints (ningle:context :log-manager)))
-                          ws))))
-            (lambda (responder)
-              (declare (ignore responder))
-              (wsd:start-connection ws))))))
+(defvar *log-manager-mw*
+  (lambda (app)
+    (let ((*log-manager* (make-log-manager)))
+      (lambda (env)
+        (funcall app env))))
+  "a lack middleware that provides a global log-manager")
 
 
-(defun make-log-endpoint (&optional log-manager)
+(defun is-endpoint (logid)
+  "returns t if logid is an endpoint, otherwise nil"
+  (bt:with-lock-held ((log-manager-lock *log-manager*))
+    (if (gethash logid
+                 (log-manager-endpoints *log-manager*))
+      t
+      nil)))
+
+
+(defun log-manager-attach (logid ws)
+  "attach a new websocket to an endpoint"
+  (bt:with-lock-held ((log-manager-lock *log-manager*))
+    (wsd:on :open ws
+            (lambda ()
+              (logger:logger-attach
+                (gethash
+                  logid
+                  (log-manager-endpoints *log-manager*))
+                ws)))))
+
+
+(defun make-log-endpoint ()
   "create a new logging endpoint. returns the endpoint
   id and the endpoints logger"
-  (unless log-manager
-    (unless (ningle:context :log-manager)
-      (setf (ningle:context :log-manager)
-            (make-log-manager)))
-    (setf log-manager (ningle:context :log-manager)))
-
   (let ((logid (random-string)))
-    (if (gethash logid (log-manager-endpoints log-manager))
-      (make-log-endpoint log-manager)
+    (if (gethash logid (log-manager-endpoints *log-manager*))
+      (make-log-endpoint *log-manager*)
       (let ((logger (logger:make-logger)))
-        (setf (gethash logid (log-manager-endpoints log-manager))
+        (setf (gethash logid (log-manager-endpoints *log-manager*))
               logger)
       (values logid logger)))))
 
@@ -73,5 +76,3 @@ the vector ALPHABET.
         do (setf (cl:aref id i)
                  (cl:aref alphabet (random alphabet-length)))
         finally (return id)))
-
-

@@ -18,6 +18,7 @@
                 :components
                 ((:file "core")
                  (:file "logger")
+                 (:file "log-manager")
                  (:file "api")
-                 (:file "log-manager"))))
+                 (:file "logs"))))
   :description "the peroku server")
