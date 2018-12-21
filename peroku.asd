@@ -12,10 +12,12 @@
                :cl-json
                :cl-base64
                :websocket-driver-server
-               :bordeaux-threads)
+               :bordeaux-threads
+               :lack)
   :components ((:module "peroku"
                 :components
                 ((:file "core")
                  (:file "logger")
-                 (:file "api"))))
+                 (:file "api")
+                 (:file "log-manager"))))
   :description "the peroku server")

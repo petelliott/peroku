@@ -22,7 +22,7 @@
   (bt:with-lock-held ((logger-lock logger))
     (push message (logger-history logger))
     (setf (logger-websockets logger)
-          (reduce
+          (remove-if
             (lambda (sock)
               (wsd:send sock message)
               (eq (wsd:ready-state sock) :closed))
