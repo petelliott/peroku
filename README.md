@@ -88,7 +88,7 @@ Example response:
 }
 ```
 
-#### [DELETE] /:project
+#### [DELETE] /projects/:project
 
 Stops and deletes `:project`
 

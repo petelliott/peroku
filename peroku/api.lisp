@@ -36,12 +36,12 @@
           (docker:start-container project)
           (json:encode-json-to-string cont))))
 
-(setf (ningle:route *app* "/:project" :method :GET)
+(setf (ningle:route *app* "/projects/:project" :method :GET)
       (lambda (params)
         (declare (ignore params))
         "getting project not yet implemented"))
 
-(setf (ningle:route *app* "/:project" :method :DELETE)
+(setf (ningle:route *app* "/projects/:project" :method :DELETE)
       (lambda (params)
         (core:delete-project
           (cdr (assoc :project params)))))
