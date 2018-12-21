@@ -59,14 +59,15 @@ Lists all currently running projects
 
 #### [POST] /run
 
-Builds and runs a project. It is assumed the webapp you are running is on port 80
+Builds and runs a project. Returns the id of a websocket with build logs.
+It is assumed the webapp you are running is on port 80
 
 Example request:
 
 | key       | description |
 | --------- | ----------- |
 | `project` | The name of the project. Used to identify it for future requests |
-| `rule`    | the [traefik](traefik.io) rule to route to the host |
+| `rule`    | the [traefik](https://traefik.io) rule to route to the host |
 | `data`    | A base64 encoded tarfile that docker can build |
 
 ```json
@@ -79,18 +80,20 @@ Example request:
 
 Example response:
 
-*Note*: this is subject to change when websocket logs are implemented.
-
 ```json
 {
-    "Id": "c1b1e894a0ddfe8f8b05d60d45e191ce060dd3239225d1f7a4f6e42df04376a6",
-    "Warnings": null
+    "logid": "joi5l8QZy2hIWzrQ"
 }
 ```
 
 #### [DELETE] /projects/:project
 
 Stops and deletes `:project`
+
+#### [GET] /logs/:logid
+
+Connects to a log websocket. Logging endpoints are reuseable, but are not
+persistant and may go away after some time.
 
 ### peroku client
 
