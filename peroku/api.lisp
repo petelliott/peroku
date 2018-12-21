@@ -28,13 +28,24 @@
 (setf (ningle:route *app* "/run" :method :POST)
       (lambda (params)
         (headers :content-type "application/json")
-        (let* ((project (cdr (assoc "project" params :test #'string=)))
-               (rule (cdr (assoc "rule" params :test #'string=)))
-               (data (cdr (assoc "data" params :test #'string=)))
-               (image (cdr (assoc :+ID+ (core:build data))))
-               (cont (core:replace-container project rule image)))
-          (docker:start-container project)
-          (json:encode-json-to-string cont))))
+        (let ((project (cdr (assoc "project" params :test #'string=)))
+              (rule (cdr (assoc "rule" params :test #'string=)))
+              (data (cdr (assoc "data" params :test #'string=))))
+          (lambda (responder)
+            (multiple-value-bind (logid logger)
+                (logman:make-log-endpoint)
+              (funcall responder
+                       (json:encode-json-to-string
+                         `(("logid" . ,logid))))
+              (let* ((image (cdr (assoc :+ID+
+                                        (core:build
+                                          data
+                                          :strmfun
+                                          (lambda (message)
+                                            (logger:logger-send logger message))))))
+                     (cont (core:replace-container project rule image)))
+                (logger:logger-close logger)
+                (docker:start-container project)))))))
 
 (setf (ningle:route *app* "/projects/:project" :method :GET)
       (lambda (params)

@@ -30,6 +30,7 @@
 
 (setf logman:*log-manager* (logman:make-log-manager))
 
+; TODO: fix this
 #|
 (print peroku.api:*app*)
 (setf peroku.api:*app*
