@@ -54,8 +54,13 @@
 
 (setf (ningle:route *app* "/projects/:project" :method :DELETE)
       (lambda (params)
-        (core:delete-project
-          (cdr (assoc :project params)))))
+        (handler-case
+          (core:delete-project
+            (cdr (assoc :project params)))
+        (error ()
+          `(404 (:content-type "text/plain")
+            (,(format nil "project '~a' not found."
+                      (cdr (assoc :project params)))))))))
 
 (defun headers (&rest headers)
   (setf (lack.response:response-headers ningle:*response*)
