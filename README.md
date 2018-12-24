@@ -24,7 +24,32 @@ docker-compose.yml to `peroku.your-domain.com`.
 
 ### peroku client
 
-The peroku client has not been implemented yet.
+1. Build the client. ecl is the recomended implementation to build
+   the project as it produces executables 1/5 the size of sbcl.
+
+```
+* (asdf:make :peroku-client)
+```
+
+2. Setup a dockerfile that will build and run your project on port 80
+
+3. Setup a `.peroku.json` for your project. Tokens currently have no effect.
+
+```json
+{
+    "token": "aksdfkldsjvieii",
+    "peroku": "peroku.localhost",
+    "project": "test-proj",
+    "rule": "Host:test.localhost"
+}
+```
+
+4. Deploy the project.
+
+```bash
+$ perok
+$ perok .
+```
 
 ## api
 
