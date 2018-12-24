@@ -9,6 +9,10 @@ RUN sbcl --load quicklisp.lisp --eval '(quicklisp-quickstart:install)'\
 RUN git clone https://github.com/Petelliott/cl-docker.git \
     /root/quicklisp/local-projects/cl-docker
 
+#TODO: remove this when upstream websocket-driver is fixed
+RUN git clone https://github.com/Petelliott/websocket-driver.git \
+    /root/quicklisp/local-projects/websocket-driver
+
 # preload some dependencies for better cacheing
 # missing ones here will be added up when peroku is loaded
 RUN sbcl --eval '(ql:quickload :clack)' \
