@@ -10,10 +10,12 @@
   :depends-on (:cl-json
                :cl-base64
                :uiop
-               :websocket-driver-client)
+               :websocket-driver-client
+               :dexador)
   :components ((:module "peroku-client"
                 :components
-                ((:file "main"))))
+                ((:file "api")
+                 (:file "main"))))
   :description "the peroku client"
   :build-operation program-op
   :build-pathname "perok"
