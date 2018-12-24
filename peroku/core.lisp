@@ -27,7 +27,11 @@
     :json `(("Labels"
              (,+label+ . "")
              ("traefik.port" . "80")
-             ("traefik.frontend.rule" . ,rule)))))
+             ("traefik.frontend.rule" . ,rule))
+             ("HostConfig" .
+              (("RestartPolicy" .
+               (("Name" . "always")
+                ("RestartPolicy" . 0))))))))
 
 (defun replace-container (project rule image)
   "creates a new container but deletes the old one first (if it exists)"
