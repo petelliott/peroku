@@ -4,15 +4,6 @@
 
 (in-package :peroku.logs)
 
-(setf (ningle:route peroku.api:*app* "/logs/logtest" :method :GET)
-      (lambda (params)
-        (declare (ignore params))
-        (multiple-value-bind (logid logger)
-            (logman:make-log-endpoint)
-          (logger:logger-send logger "hello")
-          (logger:logger-send logger "world")
-          logid)))
-
 
 (setf (ningle:route peroku.api:*app* "/logs/:logid" :method :GET)
       (lambda (params)
