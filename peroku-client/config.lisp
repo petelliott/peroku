@@ -18,10 +18,10 @@
 
 (defgeneric load-config (config))
 
-(defmacro with-config (config &rest body)
+(defmacro with-config ((config) &rest body)
   "provides an environment with the peroku config bound"
   `(multiple-value-bind (*token* *peroku* *project* *rule*)
-      (load-config ,(car config))
+      (load-config ,config)
       (progn ,@body)))
 
 (defmethod load-config :around (config)

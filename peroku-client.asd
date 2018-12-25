@@ -9,12 +9,15 @@
   :license "AGPL"
   :depends-on (:cl-json
                :cl-base64
-               :uiop
+               :archive
+               :flexi-streams
                :websocket-driver-client
+               :cl-fad
                :dexador)
   :components ((:module "peroku-client"
                 :components
-                ((:file "config")
+                ((:file "util")
+                 (:file "config")
                  (:file "core")
                  (:file "main"))))
   :description "the peroku client"

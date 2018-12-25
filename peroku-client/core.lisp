@@ -23,6 +23,7 @@
                 (cdr (assoc :rule alist))))
       projects)))
 
+
 #|
 (defun up (peroku project rule)
   "bring up the project"

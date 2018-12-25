@@ -14,6 +14,8 @@
        (core:list-projects config:*peroku*))
       ((string= (car args) "down")
        (core:down config:*peroku* config:*project*))
+      ((string= (car args) "test")
+       (write-string (util:tar-and-b64 #P".")))
       (t (format t "~&useage: perok [up|down|list]~%")))))
 
 (defun start-peroku ()
