@@ -1,5 +1,5 @@
 (defpackage :peroku-client.config
-  (:nicknames pcli.config)
+  (:nicknames :pcli.config :config)
   (:use :cl)
   (:export
     *token*
@@ -7,8 +7,7 @@
     *project*
     *rule*
     #:load-config
-    #:with-config
-    ))
+    #:with-config))
 
 (in-package :peroku-client.config)
 
@@ -22,13 +21,12 @@
 (defmacro with-config (config &rest body)
   "provides an environment with the peroku config bound"
   `(multiple-value-bind (*token* *peroku* *project* *rule*)
-      (load-config ,config)
-    (unwind-protect
-      @,body)))
+      (load-config ,(car config))
+      (progn ,@body)))
 
 (defmethod load-config :around (config)
   "load a configuration"
-  (let ((jobj (call-next-method)))
+  (let ((params (call-next-method)))
     (values
       (cdr (assoc :token params))
       (cdr (assoc :peroku params))
@@ -46,5 +44,5 @@
 
 (defmethod load-config ((config pathname))
   "load a configuration from a filename"
-  (with-open-file (strm config :direction input)
+  (with-open-file (strm config :direction :input)
     (json:decode-json strm)))

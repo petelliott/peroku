@@ -14,7 +14,8 @@
                :dexador)
   :components ((:module "peroku-client"
                 :components
-                ((:file "api")
+                ((:file "config")
+                 (:file "core")
                  (:file "main"))))
   :description "the peroku client"
   :build-operation program-op
