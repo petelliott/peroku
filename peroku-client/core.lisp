@@ -24,11 +24,17 @@
       projects)))
 
 
-#|
 (defun up (peroku project rule)
   "bring up the project"
-  t)
-|#
+  (dex:post
+    (concatenate 'string
+                 peroku
+                 "/run")
+    :content (json:encode-json-to-string
+               `(("project" . ,project)
+                 ("rule" . ,rule)
+                 ("data" . ,(util:tar-and-b64 #P"."))))))
+
 
 (defun down (peroku project)
   "take down a project"

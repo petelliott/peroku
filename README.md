@@ -38,7 +38,7 @@ docker-compose.yml to `peroku.your-domain.com`.
 ```json
 {
     "token": "aksdfkldsjvieii",
-    "peroku": "peroku.localhost",
+    "peroku": "http://peroku.localhost",
     "project": "test-proj",
     "rule": "Host:test.localhost"
 }
