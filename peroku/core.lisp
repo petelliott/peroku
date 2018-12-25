@@ -29,7 +29,8 @@
              ("traefik.port" . "80")
              ("traefik.frontend.rule" . ,rule))
              ("HostConfig" .
-              (("RestartPolicy" .
+              (("NetworkMode" . "peroku_default")
+               ("RestartPolicy" .
                (("Name" . "always")
                 ("RestartPolicy" . 0))))))))
 
