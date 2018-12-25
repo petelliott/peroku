@@ -1,0 +1,5 @@
+{
+    "peroku": "http://peroku.localhost",
+    "project": "peroku-example",
+    "rule": "Host:example.localhost"
+}
