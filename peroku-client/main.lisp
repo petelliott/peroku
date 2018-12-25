@@ -12,6 +12,8 @@
     (cond
       ((string= (car args) "list")
        (core:list-projects config:*peroku*))
+      ((string= (car args) "down")
+       (core:down config:*peroku* config:*project*))
       (t (format t "~&useage: perok [up|down|list]~%")))))
 
 (defun start-peroku ()
