@@ -30,6 +30,7 @@
     (concatenate 'string
                  peroku
                  "/run")
+    :headers '(("Content-Type" . "application/json"))
     :content (json:encode-json-to-string
                `(("project" . ,project)
                  ("rule" . ,rule)
