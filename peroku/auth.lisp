@@ -12,8 +12,9 @@
 
 (setf (ningle:requirement peroku:*app* :secured)
       (lambda (value)
-        (and
-          value
+        (declare (ignore value))
+        (or
+          (null *token*)
           (string=
             *token*
             (gethash
