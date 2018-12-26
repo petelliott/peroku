@@ -10,15 +10,18 @@
   :depends-on (:ningle
                :docker
                :cl-json
+               :uiop
                :cl-base64
                :websocket-driver-server
                :bordeaux-threads
                :lack)
   :components ((:module "peroku"
                 :components
-                ((:file "core")
+                ((:file "app")
+                 (:file "core")
                  (:file "logger")
                  (:file "log-manager")
+                 (:file "auth")
                  (:file "api")
                  (:file "logs"))))
   :description "the peroku server")

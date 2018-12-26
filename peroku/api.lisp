@@ -1,12 +1,9 @@
 (defpackage :peroku.api
   (:nicknames api)
-  (:use :cl)
-  (:export
-    #:*app*))
+  (:use :cl :peroku)
+  (:export))
 
 (in-package :peroku.api)
-
-(defvar *app* (make-instance 'ningle:<app>))
 
 
 (setf (ningle:route *app* "/" :method :GET)
@@ -16,7 +13,8 @@
                 (asdf:component-version
                   (asdf:find-system :peroku)))))
 
-(setf (ningle:route *app* "/list" :method :GET)
+
+(setf (ningle:route *app* "/list" :method :GET :secured t)
       (lambda (params)
         (declare (ignore params))
         (headers :content-type "application/json")
@@ -25,7 +23,9 @@
             (json:encode-json-to-string projects)
             "[]"))))
 
-(setf (ningle:route *app* "/run" :method :POST)
+(auth:unauth "/list" :method :GET)
+
+(setf (ningle:route *app* "/run" :method :POST :secured t)
       (lambda (params)
         (headers :content-type "application/json")
         (let ((project (cdr (assoc "project" params :test #'string=)))
@@ -47,12 +47,16 @@
               (json:encode-json-to-string
                 `(("logid" . ,logid)))))))
 
-(setf (ningle:route *app* "/projects/:project" :method :GET)
+(auth:unauth "/run" :method :POST)
+
+(setf (ningle:route *app* "/projects/:project" :method :GET :secured t)
       (lambda (params)
         (declare (ignore params))
         "getting project not yet implemented"))
 
-(setf (ningle:route *app* "/projects/:project" :method :DELETE)
+(auth:unauth "/project/:project" :method :GET)
+
+(setf (ningle:route *app* "/projects/:project" :method :DELETE :secured t)
       (lambda (params)
         (handler-case
           (core:delete-project
@@ -61,6 +65,8 @@
           `(404 (:content-type "text/plain")
             (,(format nil "project '~a' not found."
                       (cdr (assoc :project params)))))))))
+
+(auth:unauth "/project/:project" :method :DELETE)
 
 (defun headers (&rest headers)
   (setf (lack.response:response-headers ningle:*response*)

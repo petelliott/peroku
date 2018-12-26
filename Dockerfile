@@ -31,6 +31,6 @@ RUN sbcl --eval '(ql:quickload :peroku)' --quit
 
 CMD sbcl --eval '(ql:quickload :clack)' \
     --eval '(ql:quickload :peroku)' \
-    --eval '(clack:clackup peroku.api:*app* :use-thread nil :port 80)' \
+    --eval '(clack:clackup peroku:*app* :use-thread nil :port 80)' \
     --quit
 

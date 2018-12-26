@@ -5,7 +5,7 @@
 (in-package :peroku.logs)
 
 
-(setf (ningle:route peroku.api:*app* "/logs/:logid" :method :GET)
+(setf (ningle:route peroku:*app* "/logs/:logid" :method :GET)
       (lambda (params)
         (let ((ws (wsd:make-server
                     (lack.request:request-env ningle:*request*)))
