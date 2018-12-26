@@ -14,6 +14,7 @@
   (let ((projects (json:decode-json-from-string
                     (dex:get
                       (concatenate 'string
+                                   "http://"
                                    peroku
                                    "/list")))))
     (mapc
@@ -26,15 +27,24 @@
 
 (defun up (peroku project rule)
   "bring up the project"
-  (dex:post
-    (concatenate 'string
-                 peroku
-                 "/run")
-    :headers '(("Content-Type" . "application/json"))
-    :content (json:encode-json-to-string
-               `(("project" . ,project)
-                 ("rule" . ,rule)
-                 ("data" . ,(util:tar-and-b64 #P"."))))))
+  (let ((logid (cdr (assoc :logid
+                      (json:decode-json-from-string
+                        (dex:post
+                          (concatenate 'string
+                                       "http://"
+                                       peroku
+                                       "/run")
+                          :headers '(("Content-Type" . "application/json"))
+                          :content (json:encode-json-to-string
+                                     `(("project" . ,project)
+                                       ("rule" . ,rule)
+                                       ("data" . ,(util:tar-and-b64 #P"."))))))))))
+    (util:write-websocket
+      (concatenate 'string
+                   "ws://"
+                   peroku
+                   "/logs/"
+                   logid))))
 
 
 (defun down (peroku project)
@@ -42,6 +52,7 @@
   (handler-case
     (progn
       (dex:delete (concatenate 'string
+                               "ws://"
                                peroku
                                "/projects/"
                                project))

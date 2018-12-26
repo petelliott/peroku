@@ -12,6 +12,7 @@
                :archive
                :flexi-streams
                :websocket-driver-client
+               :bt-semaphore
                :cl-fad
                :dexador)
   :components ((:module "peroku-client"

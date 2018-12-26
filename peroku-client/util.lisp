@@ -2,11 +2,28 @@
   (:nicknames :pcli.util :util)
   (:use :cl)
   (:export
+    #:write-websocket
     #:tar-and-b64
     #:prepare-tar-dir
     #:relative-dir))
 
 (in-package :peroku-client.util)
+
+(defun write-websocket (uri &optional output-stream)
+  "writes the contents of a websocket to output-stream.
+  defaults to stdout. will block until the socket is closed"
+  (let ((sem (bt-sem:make-semaphore))
+        (ws (wsd:make-client uri)))
+    (wsd:start-connection ws)
+    (wsd:on :message ws
+      (lambda (message)
+        (write-string message output-stream)))
+    (wsd:on :close ws
+      (lambda (&key code reason)
+        (declare (ignore code) (ignore reason))
+        (bt-sem:signal-semaphore sem)))
+    (bt-sem:wait-on-semaphore sem)))
+
 
 (defun tar-and-b64 (path)
   "creates a tarfile from path and outputs a base64 string"
