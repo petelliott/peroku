@@ -22,6 +22,14 @@ $ docker-compose up -d
 If you want peroku to be exposed globally change `peroku.localhost` in
 docker-compose.yml to `peroku.your-domain.com`.
 
+If you want to secure your installation you can set a token as an environment
+variable. add the following to your docker compose under `peroku`:
+
+```yml
+environment:
+    - PEROKU_TOK=hello
+```
+
 ### peroku client
 
 1. Build the client. ecl is the recomended implementation to build
@@ -57,6 +65,14 @@ Step 1/7 : FROM ubuntu:18.04
 
 ### peroku server
 
+any endpoint marked with *secure* requires a token in the `Authorization` header
+
+example:
+
+```
+Authorization: jnvnqovidkakienveivei
+```
+
 #### [GET] /
 
 Returns the current peroku version
@@ -67,7 +83,7 @@ Example response:
 peroku 0.0.0
 ```
 
-#### [GET] /list
+#### *secure* [GET] /list
 
 Lists all currently running projects
 
@@ -84,7 +100,7 @@ Lists all currently running projects
 ]
 ```
 
-#### [POST] /run
+#### *secure* [POST] /run
 
 Builds and runs a project. Returns the id of a websocket with build logs.
 It is assumed the webapp you are running is on port 80
@@ -113,7 +129,7 @@ Example response:
 }
 ```
 
-#### [DELETE] /projects/:project
+#### *secure* [DELETE] /projects/:project
 
 Stops and deletes `:project`
 
