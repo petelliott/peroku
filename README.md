@@ -61,6 +61,10 @@ Step 1/7 : FROM ubuntu:18.04
 ...
 ```
 
+If you get `Bad gateway` when you request to your web service,
+wait a while or check the docker logs, because you server is probably
+still starting.
+
 ## api
 
 ### peroku server
