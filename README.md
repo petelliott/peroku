@@ -47,8 +47,10 @@ docker-compose.yml to `peroku.your-domain.com`.
 4. Deploy the project.
 
 ```bash
-$ perok
-$ perok .
+$ perok up
+Step 1/7 : FROM ubuntu:18.04
+ ---> 16508e5c265d
+...
 ```
 
 ## api
@@ -122,7 +124,46 @@ persistant and may go away after some time.
 
 ### peroku client
 
-The peroku client has not been implemented yet.
+#### perok list
+
+lists all running peroku projects and their associated rules
+
+example output:
+
+```
+peroku-example      Host:example.localhost
+test-project        Host:test.localhost
+```
+
+#### perok up
+
+builds and runs the current project.
+attaches to the docker build output and exits when finished.
+
+example output:
+
+```
+Step 1/7 : FROM ubuntu:18.04
+ ---> 16508e5c265d
+Step 2/7 : RUN apt-get update && apt-get install -y sbcl curl libssl-dev
+ ---> Running in f83e8e3e1991
+Get:1 http://security.ubuntu.com/ubuntu bionic-security InRelease [83.2 kB]
+Get:2 http://archive.ubuntu.com/ubuntu bionic InRelease [242 kB]
+Get:3 http://security.ubuntu.com/ubuntu bionic-security/universe Sources [32.5 kB]
+Get:4 http://security.ubuntu.com/ubuntu bionic-security/universe amd64 Packages [135 kB]
+Get:5 http://security.ubuntu.com/ubuntu bionic-security/multiverse amd64 Packages [1367 B]
+...
+```
+
+#### perok down
+
+takes down a peroku project.
+
+example output:
+
+```
+deleted peroku-example
+```
 
 ## dependencies
 
@@ -140,4 +181,11 @@ The peroku client has not been implemented yet.
 
 ### peroku client
 
-The peroku client has not been implemented yet.
+- [cl-json](https://common-lisp.net/project/cl-json/cl-json.html)
+- [cl-base64](http://quickdocs.org/cl-base64/)
+- [bt-semaphore](https://github.com/rmoritz/bt-semaphore)
+- [archive](https://github.com/froydnj/archive)
+- [flexi-streams](https://edicl.github.io/flexi-streams/)
+- [websocket-driver](https://github.com/Petelliott/websocket-driver) (using my fork temporarily)
+- [cl-fad](https://edicl.github.io/cl-fad/)
+- [dexador](https://github.com/fukamachi/dexador)
