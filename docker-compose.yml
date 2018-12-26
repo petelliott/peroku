@@ -12,7 +12,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # So that Traefik can listen to the Docker events
   peroku:
-    image: peroku # the peroku image
+    image: petelliott/peroku # the peroku image
     restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # So that peroku can listen to the Docker events
