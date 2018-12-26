@@ -10,7 +10,7 @@ It is available under the AGPLv3
 1. (optional -- you can use the docker hub version) build the docker image
 
     ```bash
-    $ docker build -t peroku .
+    $ docker build -t petelliott/peroku .
     ```
 
 2. start traefik and peroku
