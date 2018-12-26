@@ -27,6 +27,7 @@
     :json `(("Labels"
              (,+label+ . "")
              ("traefik.port" . "80")
+             ("traefik.enable" . "true")
              ("traefik.frontend.rule" . ,rule))
              ("HostConfig" .
               (("NetworkMode" . "peroku_default")
