@@ -9,16 +9,17 @@
 (in-package :peroku-client.core)
 
 
-(defun list-projects (token peroku)
+(defun list-projects (token peroku &key insecure)
   "list all projects managed by peroku"
   (let ((projects (json:decode-json-from-string
                     (dex:get
                       (concatenate 'string
-                                   "http://"
+                                   "https://"
                                    peroku
                                    "/list")
                       :headers (and token
-                                    `(("Authorization" . ,token)))))))
+                                    `(("Authorization" . ,token)))
+                      :insecure insecure))))
     (mapc
       (lambda (alist)
         (format t "~&~20a~a~%"
@@ -27,13 +28,13 @@
       projects)))
 
 
-(defun up (token peroku project rule)
+(defun up (token peroku project rule &key insecure)
   "bring up the project"
   (let ((logid (cdr (assoc :logid
                       (json:decode-json-from-string
                         (dex:post
                           (concatenate 'string
-                                       "http://"
+                                       "https://"
                                        peroku
                                        "/run")
                           :headers (cons
@@ -43,27 +44,30 @@
                           :content (json:encode-json-to-string
                                      `(("project" . ,project)
                                        ("rule" . ,rule)
-                                       ("data" . ,(util:tar-and-b64 #P"."))))))))))
+                                       ("data" . ,(util:tar-and-b64 #P"."))))
+                          :insecure insecure))))))
     (util:write-websocket
       (concatenate 'string
-                   "ws://"
+                   "wss://"
                    peroku
                    "/logs/"
-                   logid))))
+                   logid)
+      :insecure insecure)))
 
 
-(defun down (token peroku project)
+(defun down (token peroku project &key insecure)
   "take down a project"
   (handler-case
     (progn
       (dex:delete
         (concatenate 'string
-                     "ws://"
+                     "https://"
                      peroku
                      "/projects/"
                      project)
         :headers (and token
-                      `(("Authorization" . ,token))))
+                      `(("Authorization" . ,token)))
+        :insecure insecure)
       (format t "~&deleted ~a~%" project))
     (DEXADOR.ERROR:HTTP-REQUEST-NOT-FOUND ()
       (format t "~&project ~a not found~%" project))))

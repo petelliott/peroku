@@ -9,12 +9,12 @@
 
 (in-package :peroku-client.util)
 
-(defun write-websocket (uri &optional output-stream)
+(defun write-websocket (uri &key output-stream insecure)
   "writes the contents of a websocket to output-stream.
   defaults to stdout. will block until the socket is closed"
   (let ((sem (bt-sem:make-semaphore))
         (ws (wsd:make-client uri)))
-    (wsd:start-connection ws)
+    (wsd:start-connection ws :verify (not insecure))
     (wsd:on :message ws
       (lambda (message)
         (write-string message output-stream)))
