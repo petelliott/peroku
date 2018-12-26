@@ -7,63 +7,63 @@ It is available under the AGPLv3
 
 ### peroku server
 
-1. build the docker image
+1. (optional -- you can use the docker hub version) build the docker image
 
-```bash
-$ docker build -t peroku .
-```
+    ```bash
+    $ docker build -t peroku .
+    ```
 
 2. start traefik and peroku
 
-```bash
-$ docker-compose up -d
-```
+    ```bash
+    $ docker-compose up -d
+    ```
 
-If you want peroku to be exposed globally change `peroku.localhost` in
-docker-compose.yml to `peroku.your-domain.com`.
+    If you want peroku to be exposed globally change `peroku.localhost` in
+    docker-compose.yml to `peroku.your-domain.com`.
 
-If you want to secure your installation you can set a token as an environment
-variable. add the following to your docker compose under `peroku`:
+    If you want to secure your installation you can set a token as an environment
+    variable. add the following to your docker compose under `peroku`:
 
-```yml
-environment:
-    - PEROKU_TOK=hello
-```
+    ```yml
+    environment:
+        - PEROKU_TOK=hello
+    ```
 
 ### peroku client
 
-1. Build the client. ecl is the recomended implementation to build
+1. (optional -- see releases) Build the client. ecl is the recomended implementation to build
    the project as it produces executables 1/5 the size of sbcl.
 
-```
-* (asdf:make :peroku-client)
-```
+    ```
+    * (asdf:make :peroku-client)
+    ```
 
 2. Setup a dockerfile that will build and run your project on port 80
 
-3. Setup a `.peroku.json` for your project. Tokens currently have no effect.
+3. Setup a `.peroku.json` for your project.
 
-```json
-{
-    "token": "aksdfkldsjvieii",
-    "peroku": "peroku.localhost",
-    "project": "test-proj",
-    "rule": "Host:test.localhost"
-}
-```
+    ```json
+    {
+        "token": "aksdfkldsjvieii",
+        "peroku": "peroku.localhost",
+        "project": "test-proj",
+        "rule": "Host:test.localhost"
+    }
+    ```
 
 4. Deploy the project.
 
-```bash
-$ perok up
-Step 1/7 : FROM ubuntu:18.04
- ---> 16508e5c265d
-...
-```
+    ```bash
+    $ perok up
+    Step 1/7 : FROM ubuntu:18.04
+     ---> 16508e5c265d
+    ...
+    ```
 
-If you get `Bad gateway` when you request to your web service,
-wait a while or check the docker logs, because you server is probably
-still starting.
+    If you get `Bad gateway` when you request to your web service,
+    wait a while or check the docker logs, because you server is probably
+    still starting.
 
 ## api
 
