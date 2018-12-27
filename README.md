@@ -55,7 +55,7 @@ It is available under the AGPLv3
 4. Deploy the project.
 
     ```bash
-    $ perok up
+    $ perok noverify up
     Step 1/7 : FROM ubuntu:18.04
      ---> 16508e5c265d
     ...
@@ -64,6 +64,38 @@ It is available under the AGPLv3
     If you get `Bad gateway` when you request to your web service,
     wait a while or check the docker logs, because you server is probably
     still starting.
+
+## let's encrypt
+
+To use traefik's builtin let's encrypt support:
+
+1. uncomment the following line in docker-compose.yml
+
+    ```yml
+          #- ./acme.json:/acme.json
+    ```
+
+2. uncomment the following lines in traefik.toml, setting it to your email
+
+    ```toml
+    #[acme]
+    #email = "your-email-here@my-awesome-app.org"
+    #storage = "acme.json"
+    #entryPoint = "https"
+    #onHostRule = true
+    #[acme.httpChallenge]
+    #entryPoint = "http"
+    ```
+
+3. create acme.json
+
+    ```bash
+    $ touch acme.json
+    $ chmod 600 acme.json
+    ```
+
+for more information on let's encrypt, see
+[this guide](https://docs.traefik.io/user-guide/docker-and-lets-encrypt/)
 
 ## api
 
@@ -143,6 +175,10 @@ Connects to a log websocket. Logging endpoints are reuseable, but are not
 persistant and may go away after some time.
 
 ### peroku client
+
+Prefix and command with noverify to prevent checking of ssl certificate
+validity. This is useful when running on localhost or when not using let's
+encrypt.
 
 #### perok list
 
