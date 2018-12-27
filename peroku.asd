@@ -4,7 +4,7 @@
 (in-package :peroku-asd)
 
 (defsystem peroku
-  :version "0.0.0"
+  :version "0.1.0"
   :author  "Peter Elliott"
   :license "AGPL"
   :depends-on (:ningle
