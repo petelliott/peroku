@@ -24,7 +24,7 @@
 
 (defun forward-docker-stream (strm ws)
   "copies a docker stream to json messages to a websocket"
-  (let* ((sem bt:make-semaphore)
+  (let* ((sem (bt:make-semaphore))
          (thread
           (bt:make-thread
             (lambda ()

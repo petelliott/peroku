@@ -14,11 +14,13 @@
       (cond
         ((string= (car args) "list")
          (core:list-projects config:*token* config:*peroku* :insecure insecure))
+        ((string= (car args) "logs")
+         (core:logs config:*token* config:*peroku* config:*project* :insecure insecure))
         ((string= (car args) "up")
          (core:up config:*token* config:*peroku* config:*project* config:*rule* :insecure insecure))
         ((string= (car args) "down")
          (core:down config:*token* config:*peroku* config:*project* :insecure insecure))
-        (t (format t "~&useage: perok [up|down|list]~%"))))))
+        (t (format t "~&useage: perok [up|down|list|logs]~%"))))))
 
 (defun start-peroku ()
   (main (uiop:command-line-arguments)))

@@ -3,6 +3,7 @@
   (:use :cl)
   (:export
     #:list-projects
+    #:logs
     #:up
     #:down))
 
@@ -25,6 +26,16 @@
                 (cdr (assoc :project alist))
                 (cdr (assoc :rule alist))))
       projects)))
+
+
+(defun logs (token peroku project &key insecure)
+  "display a projects logs"
+  (util:write-ws-logs
+    (concatenate 'string
+                 "wss://" peroku
+                 "/projects/" project "/logs")
+    :insecure insecure
+    :additional-headers (util:auth-header token)))
 
 
 (defun up (token peroku project rule &key insecure)
