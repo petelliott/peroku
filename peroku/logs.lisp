@@ -42,7 +42,8 @@
       (lambda ()
         (bt:signal-semaphore sem)))
     (wsd:on :close ws
-      (lambda ()
+      (lambda (&key code reason)
+        (declare (ignore code reason))
         (bt:destroy-thread thread)))))
 
 
