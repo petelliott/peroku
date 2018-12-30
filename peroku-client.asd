@@ -4,7 +4,7 @@
 (in-package :peroku-client-asd)
 
 (defsystem peroku-client
-  :version "0.1.0"
+  :version "0.2.0"
   :author  "Peter Elliott"
   :license "AGPL"
   :depends-on (:cl-json
