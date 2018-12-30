@@ -50,7 +50,8 @@
                    peroku
                    "/logs/"
                    logid)
-      :insecure insecure)))
+      :insecure insecure
+      :additional-headers (util:auth-header token))))
 
 
 (defun down (token peroku project &key insecure)

@@ -24,12 +24,12 @@
   "writes the contents of a websocket to output-stream.
   defaults to stdout. will block until the socket is closed"
   (let ((sem (bt-sem:make-semaphore))
-        (ws (wsd:make-client uri)))
-    (wsd:start-connection ws :verify (not insecure)
-                          :additional-headers additional-headers)
+        (ws (wsd:make-client uri :additional-headers additional-headers)))
+    (wsd:start-connection ws :verify (not insecure))
     (wsd:on :message ws
       (lambda (message)
         (write-string message output-stream)))
+
     (wsd:on :close ws
       (lambda (&key code reason)
         (declare (ignore code) (ignore reason))
