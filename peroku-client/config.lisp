@@ -44,5 +44,9 @@
 
 (defmethod load-config ((config pathname))
   "load a configuration from a filename"
-  (with-open-file (strm config :direction :input)
-    (json:decode-json strm)))
+  (handler-case
+    (with-open-file (strm config :direction :input)
+      (json:decode-json strm))
+    (SB-INT:SIMPLE-FILE-ERROR ()
+      (format *error-output* "could not open .peroku.json~%")
+      (uiop:quit 1))))
