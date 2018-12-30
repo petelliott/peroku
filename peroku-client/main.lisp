@@ -23,8 +23,11 @@
            (core:down config:*token* config:*peroku* config:*project* :insecure insecure))
           (t (format t "~&useage: perok [noverify] [up|down|list|logs]~%")))
         (CL+SSL:SSL-ERROR-VERIFY ()
-          (format *error-output* "Unable to varify ssl certificate.~%")
-          (format *error-output* "Use 'perok noverify *' to not check certificate validity.~%")
+          (format *error-output* "~&Unable to varify ssl certificate.~%")
+          (format *error-output* "~&Use 'perok noverify *' to not check certificate validity.~%")
+          (uiop:quit 1))
+        (DEXADOR.ERROR:HTTP-REQUEST-FORBIDDEN ()
+          (format *error-output* "~&Missing or Invalid token~%")
           (uiop:quit 1))))))
 
 (defun start-peroku ()
