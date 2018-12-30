@@ -101,13 +101,24 @@ for more information on let's encrypt, see
 
 ### peroku server
 
-any endpoint marked with *secure* requires a token in the `Authorization` header
+Any endpoint marked with *secure* requires a token in the `Authorization` header
 
 example:
 
 ```
-Authorization: jnvnqovidkakienveivei
+Authorization: Bearer jnvnqovidkakienveivei
 ```
+
+HTTP basic authentication can also be used with any username and the
+token as the password.
+
+```
+Authorization: Basic YW55dGhpbmc6dG9rZW4=
+```
+
+Secure endpoints that recieve an invalid token, or no token
+will return `403 Forbidden`. unauthorized websockets will disconnect with
+the code `4001`.
 
 #### [GET] /
 

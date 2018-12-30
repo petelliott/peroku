@@ -2,6 +2,7 @@
   (:nicknames :pcli.util :util)
   (:use :cl)
   (:export
+    #:auth-header
     #:write-websocket
     #:tar-and-b64
     #:prepare-tar-dir
@@ -9,15 +10,26 @@
 
 (in-package :peroku-client.util)
 
-(defun write-websocket (uri &key output-stream insecure)
+(defun auth-header (token &optional headers)
+  "return the auth header in an alist with other headers"
+  (if token
+    (cons
+      `("Authorization" .
+        ,(concatenate 'string
+                      "Bearer " token))
+      headers)
+    headers))
+
+(defun write-websocket (uri &key output-stream insecure additional-headers)
   "writes the contents of a websocket to output-stream.
   defaults to stdout. will block until the socket is closed"
   (let ((sem (bt-sem:make-semaphore))
-        (ws (wsd:make-client uri)))
+        (ws (wsd:make-client uri :additional-headers additional-headers)))
     (wsd:start-connection ws :verify (not insecure))
     (wsd:on :message ws
       (lambda (message)
         (write-string message output-stream)))
+
     (wsd:on :close ws
       (lambda (&key code reason)
         (declare (ignore code) (ignore reason))
