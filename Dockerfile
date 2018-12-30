@@ -16,6 +16,7 @@ RUN git clone https://github.com/Petelliott/websocket-driver.git \
 # preload some dependencies for better cacheing
 # missing ones here will be added up when peroku is loaded
 RUN sbcl --eval '(ql:quickload :clack)' \
+    --eval '(ql:quickload :bordeaux-threads)' \
     --eval '(ql:quickload :ningle)' \
     --eval '(ql:quickload :docker)' \
     --eval '(ql:quickload :cl-base64)' \

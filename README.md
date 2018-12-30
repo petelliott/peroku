@@ -32,8 +32,8 @@ It is available under the AGPLv3
 
 ### peroku client
 
-1. (optional -- see releases) Build the client. ecl is the recomended implementation to build
-   the project as it produces executables 1/5 the size of sbcl.
+1. (optional -- see releases) Build the client. sbcl is currently the only
+   supported client.
 
     ```
     * (asdf:make :peroku-client)
@@ -180,10 +180,21 @@ Example response:
 
 Stops and deletes `:project`
 
-#### [GET] /logs/:logid
+#### *secure* [GET] /logs/:logid
 
 Connects to a log websocket. Logging endpoints are reuseable, but are not
 persistant and may go away after some time.
+
+#### *secure* [GET] /projects/:project/logs
+
+connects to the logs of the projects container as a websocket.
+
+example messages:
+
+```json
+{"stream": "stdout", "data": "hello\n"}
+{"stream": "stderr", "data": "ERROR\n"}
+```
 
 ### peroku client
 
@@ -200,6 +211,35 @@ example output:
 ```
 peroku-example      Host:example.localhost
 test-project        Host:test.localhost
+```
+
+#### perok logs
+
+follows the logs of the project. \<C-c\> to exit.
+
+example output:
+
+```
+This is SBCL 1.4.5.debian, an implementation of ANSI Common Lisp.
+More information about SBCL is available at <http://www.sbcl.org/>.
+
+SBCL is free software, provided as is, with absolutely no warranty.
+It is mostly in the public domain; some portions are provided under
+BSD-style licenses.  See the CREDITS and COPYING files in the
+distribution for more information.
+To load "clack":
+  Load 1 ASDF system:
+    clack
+; Loading "clack"
+.
+To load "peroku-example":
+  Load 1 ASDF system:
+    peroku-example
+; Loading "peroku-example"
+
+Hunchentoot server is going to start.
+Listening on localhost:80.
+^C
 ```
 
 #### perok up

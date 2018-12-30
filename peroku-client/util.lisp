@@ -4,6 +4,7 @@
   (:export
     #:auth-header
     #:write-websocket
+    #:write-ws-logs
     #:tar-and-b64
     #:prepare-tar-dir
     #:relative-dir))
@@ -35,6 +36,31 @@
         (declare (ignore code) (ignore reason))
         (bt-sem:signal-semaphore sem)))
     (bt-sem:wait-on-semaphore sem)))
+
+
+(defun write-ws-logs (uri &key insecure additional-headers)
+  "writes docker container logs to the appropriate streams"
+  (let ((sem (bt-sem:make-semaphore))
+        (ws (wsd:make-client uri :additional-headers additional-headers)))
+    (wsd:start-connection ws :verify (not insecure))
+    (wsd:on :message ws
+      (lambda (message)
+        (let* ((json (json:decode-json-from-string message))
+               (strm (cdr (assoc :stream json)))
+               (data (cdr (assoc :data json))))
+          (write-string data (cond
+                               ((string= strm "stdout")
+                                *standard-output*)
+                               ((string= strm "stderr")
+                                *error-output*))))))
+    (wsd:on :close ws
+      (lambda (&key code reason)
+        (declare (ignore code) (ignore reason))
+        (bt-sem:signal-semaphore sem)))
+    (handler-case (bt-sem:wait-on-semaphore sem)
+      (sb-sys:interactive-interrupt ()
+        (wsd:close-connection ws)
+        (format t "~%")))))
 
 
 (defun tar-and-b64 (path)
