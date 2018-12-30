@@ -17,8 +17,7 @@
                                    "https://"
                                    peroku
                                    "/list")
-                      :headers (and token
-                                    `(("Authorization" . ,token)))
+                      :headers (util:auth-header token)
                       :insecure insecure))))
     (mapc
       (lambda (alist)
@@ -37,10 +36,9 @@
                                        "https://"
                                        peroku
                                        "/run")
-                          :headers (cons
-                                     '("Content-Type" . "application/json")
-                                     (and token
-                                          `(("Authorization" . ,token))))
+                          :headers (util:auth-header
+                                     token
+                                     '(("Content-Type" . "application/json")))
                           :content (json:encode-json-to-string
                                      `(("project" . ,project)
                                        ("rule" . ,rule)
@@ -65,8 +63,7 @@
                      peroku
                      "/projects/"
                      project)
-        :headers (and token
-                      `(("Authorization" . ,token)))
+        :headers (util:auth-header token)
         :insecure insecure)
       (format t "~&deleted ~a~%" project))
     (DEXADOR.ERROR:HTTP-REQUEST-NOT-FOUND ()
