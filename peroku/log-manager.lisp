@@ -2,6 +2,8 @@
   (:nicknames :logman :log-manager)
   (:use :cl)
   (:export
+    #:*log-manager*
+    #:log-manager-endpoints
     #:*log-manager-mw*
     #:make-log-endpoint
     #:make-log-manager
@@ -13,7 +15,8 @@
 
 (defstruct log-manager
   (lock (bt:make-lock))
-  (endpoints (make-hash-table :test 'equal)))
+  (endpoints (make-hash-table :test 'equal))
+  (single-use (make-hash-table :test 'equal)))
 
 
 (defvar *log-manager*
@@ -46,19 +49,25 @@
                 (gethash
                   logid
                   (log-manager-endpoints *log-manager*))
-                ws)))))
+                ws)
+              (when (gethash logid (log-manager-single-use *log-manager*))
+                (remhash logid (log-manager-single-use *log-manager*))
+                (remhash logid (log-manager-endpoints *log-manager*)))))))
 
 
-(defun make-log-endpoint ()
+
+(defun make-log-endpoint (&key single-use)
   "create a new logging endpoint. returns the endpoint
   id and the endpoints logger"
   (let ((logid (random-string)))
-    (if (gethash logid (log-manager-endpoints *log-manager*))
+    (if (is-endpoint logid)
       (make-log-endpoint *log-manager*)
       (let ((logger (logger:make-logger)))
         (setf (gethash logid (log-manager-endpoints *log-manager*))
               logger)
-      (values logid logger)))))
+        (when single-use
+          (setf (gethash logid (log-manager-single-use *log-manager*)) t))
+        (values logid logger)))))
 
 
 (defvar +ascii-alphabet+ "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNIPQRSTUVWXYZ0123456789")

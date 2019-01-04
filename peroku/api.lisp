@@ -31,21 +31,21 @@
         (let ((project (cdr (assoc "project" params :test #'string=)))
               (rule (cdr (assoc "rule" params :test #'string=)))
               (data (cdr (assoc "data" params :test #'string=))))
-            (multiple-value-bind (logid logger)
-                (logman:make-log-endpoint)
-              (bt:make-thread
-                (lambda ()
-                  (let* ((image (cdr (assoc :+ID+
-                                            (core:build
-                                              data
-                                              :strmfun
-                                              (lambda (message)
-                                                (logger:logger-send logger message))))))
-                         (cont (core:replace-container project rule image)))
-                    (logger:logger-close logger)
-                    (docker:start-container project))))
-              (json:encode-json-to-string
-                `(("logid" . ,logid)))))))
+          (multiple-value-bind (logid logger)
+            (logman:make-log-endpoint :single-use t)
+            (bt:make-thread
+              (lambda ()
+                (let* ((image (cdr (assoc :+ID+
+                                          (core:build
+                                            data
+                                            :strmfun
+                                            (lambda (message)
+                                              (logger:logger-send logger message))))))
+                       (cont (core:replace-container project rule image)))
+                  (logger:logger-close logger)
+                  (docker:start-container project))))
+            (json:encode-json-to-string
+              `(("logid" . ,logid)))))))
 
 (auth:unauth "/run" :method :POST)
 
