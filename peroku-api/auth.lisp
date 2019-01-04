@@ -1,4 +1,4 @@
-(defpackage :peroku.auth
+(defpackage :peroku.api.auth
   (:nicknames auth)
   (:use :cl)
   (:export
@@ -6,12 +6,12 @@
     #:unauth
     #:ws-unauth))
 
-(in-package :peroku.auth)
+(in-package :peroku.api.auth)
 
 (defparameter *token* (uiop:getenv "PEROKU_TOK"))
 
 
-(setf (ningle:requirement peroku:*app* :secured)
+(setf (ningle:requirement peroku.api.app:*app* :secured)
       (lambda (value)
         (declare (ignore value))
         (or
@@ -42,14 +42,14 @@
 
 (defun unauth (&rest args)
   "define an unautorised endpoint for correct error codes"
-  (setf (apply #'ningle:route peroku:*app* args)
+  (setf (apply #'ningle:route peroku.api.app:*app* args)
         (lambda (params)
           (declare (ignore params))
           '(403 (:content-type "text/plain") ("Invalid token.")))))
 
 (defun ws-unauth (&rest args)
   "define an unautorised websocket endpoint for correct error codes"
-  (setf (apply #'ningle:route peroku:*app* args)
+  (setf (apply #'ningle:route peroku.api.app:*app* args)
         (lambda (params)
           (let ((ws (wsd:make-server
                       (lack.request:request-env ningle:*request*))))

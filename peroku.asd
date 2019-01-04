@@ -7,21 +7,15 @@
   :version "0.2.0"
   :author  "Peter Elliott"
   :license "AGPL"
-  :depends-on (:ningle
-               :docker
+  :depends-on (:docker
                :cl-json
                :uiop
-               :cl-base64
                :websocket-driver-server
-               :bordeaux-threads
-               :lack)
+               :cl-base64
+               :bordeaux-threads)
   :components ((:module "peroku"
                 :components
-                ((:file "app")
-                 (:file "core")
+                ((:file "core")
                  (:file "logger")
-                 (:file "log-manager")
-                 (:file "auth")
-                 (:file "api")
-                 (:file "logs"))))
-  :description "the peroku server")
+                 (:file "log-manager"))))
+  :description "the core of a peroku server")

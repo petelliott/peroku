@@ -1,11 +1,11 @@
-(defpackage :peroku.logs
+(defpackage :peroku.api.logs
   (:nicknames :logs)
   (:use :cl))
 
-(in-package :peroku.logs)
+(in-package :peroku.api.logs)
 
 
-(setf (ningle:route peroku:*app* "/logs/:logid" :method :GET :secured t)
+(setf (ningle:route peroku.api.app:*app* "/logs/:logid" :method :GET :secured t)
       (lambda (params)
         (let ((ws (wsd:make-server
                     (lack.request:request-env ningle:*request*)))
@@ -47,7 +47,7 @@
         (bt:destroy-thread thread)))))
 
 
-(setf (ningle:route peroku:*app* "/projects/:project/logs" :method :GET :secured t)
+(setf (ningle:route peroku.api.app:*app* "/projects/:project/logs" :method :GET :secured t)
       (lambda (params)
         (let* ((ws (wsd:make-server
                     (lack.request:request-env ningle:*request*)))
