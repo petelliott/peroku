@@ -1,6 +1,6 @@
 (defpackage :peroku.api
   (:nicknames api)
-  (:use :cl :peroku)
+  (:use :cl :peroku.api.app)
   (:export))
 
 (in-package :peroku.api)
@@ -11,7 +11,7 @@
         (declare (ignore params))
         (format nil "peroku ~a"
                 (asdf:component-version
-                  (asdf:find-system :peroku)))))
+                  (asdf:find-system :peroku-api)))))
 
 
 (setf (ningle:route *app* "/list" :method :GET :secured t)
