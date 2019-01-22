@@ -35,12 +35,11 @@
             (logman:make-log-endpoint :single-use t)
             (bt:make-thread
               (lambda ()
-                (let* ((image (cdr (assoc :+ID+
-                                          (core:build
-                                            data
-                                            :strmfun
-                                            (lambda (message)
-                                              (logger:logger-send logger message))))))
+                (let* ((image (core:build
+                                data
+                                :strmfun
+                                (lambda (message)
+                                  (logger:logger-send logger message))))
                        (cont (core:replace-container project rule image)))
                   (logger:logger-close logger)
                   (docker:start-container project))))

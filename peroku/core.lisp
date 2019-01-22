@@ -13,11 +13,13 @@
 
 (defvar +label+ "ca.pelliott.peroku.managed")
 
+
 (defun build (tarstring &key strmfun)
   "builds a project image from a name and base64 tarfile string"
-  (docker:build-image
-    (base64:base64-string-to-usb8-array tarstring)
-    :call strmfun))
+  (cdr (assoc :+ID+
+              (docker:build-image
+                (base64:base64-string-to-usb8-array tarstring)
+                :call strmfun))))
 
 (defun create-container (project rule image)
   "creates the containers for a project"
