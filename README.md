@@ -7,10 +7,11 @@ It is available under the AGPLv3
 
 ### peroku server
 
-1. (optional -- you can use the docker hub version) build the docker image
+1. (optional -- you can use the docker hub versions) build the docker image
 
     ```bash
-    $ docker build -t petelliott/peroku .
+    $ docker build -f peroku.dockerfile -t petelliott/peroku .
+    $ docker build -f peroku-api.dockerfile -t petelliott/peroku-api .
     ```
 
 2. start traefik and peroku
