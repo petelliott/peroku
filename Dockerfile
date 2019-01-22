@@ -25,13 +25,15 @@ RUN sbcl --eval '(ql:quickload :clack)' \
     --quit
 
 COPY peroku.asd /root/quicklisp/local-projects/peroku/peroku.asd
+COPY peroku-api.asd /root/quicklisp/local-projects/peroku/peroku-api.asd
 COPY peroku/ /root/quicklisp/local-projects/peroku/peroku/
+COPY peroku-api/ /root/quicklisp/local-projects/peroku/peroku-api/
 
 # preload all of the dependancies
-RUN sbcl --eval '(ql:quickload :peroku)' --quit
+RUN sbcl --eval '(ql:quickload :peroku-api)' --quit
 
 CMD sbcl --eval '(ql:quickload :clack)' \
-    --eval '(ql:quickload :peroku)' \
-    --eval '(clack:clackup peroku:*app* :use-thread nil :port 80)' \
+    --eval '(ql:quickload :peroku-api)' \
+    --eval '(clack:clackup peroku.api.app:*app* :use-thread nil :port 80)' \
     --quit
 
