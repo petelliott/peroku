@@ -97,6 +97,31 @@ To use traefik's builtin let's encrypt support:
 for more information on let's encrypt, see
 [this guide](https://docs.traefik.io/user-guide/docker-and-lets-encrypt/)
 
+## travis-ci integration
+
+you can deploy to peroku when all of your travis test pass.
+
+add the following to your `.travis.yml`
+
+```yml
+deploy:
+  provider: script
+  script: curl https://raw.githubusercontent.com/Petelliott/peroku/master/deploy.sh | bash -s https://peroku.example.com peroku-example Host:example.example.com
+  on:
+    branch: master
+```
+
+follow the [travis
+guide](https://docs.travis-ci.com/user/environment-variables/#defining-variables-in-repository-settings)
+to add the `$PEROKU_TOK` environment variable.
+
+see [travis script deployment
+documentation](https://docs.travis-ci.com/user/deployment/script/) for more
+configuration options.
+
+see [Petelliott/peroku-example](https://github.com/Petelliott/peroku-example)
+for a working example.
+
 ## api
 
 ### peroku server
