@@ -16,19 +16,11 @@ It is available under the AGPLv3
 2. start traefik and peroku
 
     ```bash
-    $ docker-compose up -d
+    $ PEROKU_TOK=token docker-compose up -d
     ```
 
     If you want peroku to be exposed globally change `peroku.localhost` in
     docker-compose.yml to `peroku.your-domain.com`.
-
-    If you want to secure your installation you can set a token as an environment
-    variable. add the following to your docker compose under `peroku`:
-
-    ```yml
-    environment:
-        - PEROKU_TOK=hello
-    ```
 
 ### peroku client
 
