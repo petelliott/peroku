@@ -86,6 +86,9 @@ To use traefik's builtin let's encrypt support:
     $ chmod 600 acme.json
     ```
 
+4. change the hosts in [peroku/docker-compose.yml](/peroku/docker-compose.yml)
+   from `*.localhost` to `*.yourdomain.ca`
+
 for more information on let's encrypt, see
 [this guide](https://docs.traefik.io/user-guide/docker-and-lets-encrypt/)
 

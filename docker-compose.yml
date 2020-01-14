@@ -13,6 +13,9 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock # So that Traefik can listen to the Docker events
       - ./traefik.toml:/traefik.toml
       #- ./acme.json:/acme.json
+    labels:
+        # change this to expose peroku to your domain name
+      - "traefik.frontend.rule=Host:traefik.localhost"
   peroku:
     image: petelliott/peroku # the peroku image
     environment:
