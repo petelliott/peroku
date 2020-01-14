@@ -22,6 +22,12 @@ It is available under the AGPLv3
     If you want peroku to be exposed globally change `peroku.localhost` in
     docker-compose.yml to `peroku.your-domain.com`.
 
+    to generate tokens you can run:
+
+    ```
+    dd if=/dev/urandom bs=24 count=1 status=none | xxd -p
+    ```
+
 ### peroku client
 
 1. (optional -- see releases) Build the client. sbcl is currently the only
