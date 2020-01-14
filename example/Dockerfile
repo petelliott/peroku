@@ -14,5 +14,5 @@ RUN sbcl --eval '(ql:quickload :peroku-example)' --quit
 
 CMD sbcl --eval '(ql:quickload :clack)' \
     --eval '(ql:quickload :peroku-example)' \
-    --eval '(clack:clackup example:*app* :use-thread nil :port 80)' \
+    --eval '(clack:clackup example:*app* :use-thread nil :address "0.0.0.0" :port 80)' \
     --quit
