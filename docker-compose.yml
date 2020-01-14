@@ -2,7 +2,7 @@ version: '3'
 
 services:
   peroku-traefik:
-    image: traefik # The official Traefik docker image
+    image: traefik:v1.7 # The official Traefik docker image
     restart: always
     command: --api --docker # Enables the web UI and tells Traefik to listen to docker
     ports:

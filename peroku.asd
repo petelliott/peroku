@@ -4,7 +4,7 @@
 (in-package :peroku-asd)
 
 (defsystem peroku
-  :version "0.2.0"
+  :version "0.3.1"
   :author  "Peter Elliott"
   :license "AGPL"
   :depends-on (:docker

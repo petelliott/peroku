@@ -33,5 +33,5 @@ COPY peroku/ /root/quicklisp/local-projects/peroku/peroku/
 RUN sbcl --eval '(ql:quickload :peroku-api)' --quit
 
 CMD sbcl --eval "(ql:quickload '(:clack :peroku-api))" \
-    --eval '(clack:clackup peroku.api.app:*app* :use-thread nil :port 80)' \
+    --eval '(clack:clackup peroku.api.app:*app* :use-thread nil :address "0.0.0.0" :port 80)' \
     --quit
